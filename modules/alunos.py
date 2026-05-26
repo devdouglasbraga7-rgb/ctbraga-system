@@ -9,6 +9,7 @@ def cadastrar_alunos():
                 "cpf": cpf,
                 }
     alunos.append(cadastro)
+    alunos.append(cadastro)
 def listar_alunos():
     pass
 def alterar_alunos():

@@ -1,5 +1,6 @@
 from modules.alunos import cadastrar_alunos
 
+alunos = []
 while True:
     print("=" * 50)
     print("1 - Cadastrar aluno")
