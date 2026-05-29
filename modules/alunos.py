@@ -1,5 +1,3 @@
-cadastro_aluno = []
-
 proximo_id = 1
 def cadastrar_alunos(cadastro_aluno):
     
