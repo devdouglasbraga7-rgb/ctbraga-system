@@ -1,6 +1,10 @@
-from modules.alunos import cadastrar_alunos
+import modules.alunos as alunos
 
-alunos = []
+
+cadastro_aluno = []
+
+proximo_id = 1
+
 while True:
     print("=" * 50)
     print("1 - Cadastrar aluno")
@@ -12,4 +16,6 @@ while True:
     escolha = int(input("Digite uma das opções numéricas: "))
 
     if escolha == 1:
-        cadastrar_alunos()
+        alunos.cadastrar_alunos(cadastro_aluno)
+    elif escolha == 2:
+        alunos.listar_alunos(cadastro_aluno)
