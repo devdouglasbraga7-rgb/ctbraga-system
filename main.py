@@ -19,3 +19,7 @@ while True:
         alunos.cadastrar_alunos(cadastro_aluno)
     elif escolha == 2:
         alunos.listar_alunos(cadastro_aluno)
+    elif escolha == 3:
+        alunos.alterar_alunos(cadastro_aluno)
+    else:
+        alunos.remover_aluno(cadastro_aluno)
