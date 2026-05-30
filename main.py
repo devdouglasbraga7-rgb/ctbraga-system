@@ -1,25 +1,28 @@
 import modules.alunos as alunos
 
-
-cadastro_aluno = []
-
-proximo_id = 1
+lista_alunos = []
 
 while True:
-    print("=" * 50)
-    print("1 - Cadastrar aluno")
-    print("2 - Listar alunos")
-    print("3 - Alterar aluno")
-    print("4 - Remover aluno")
-    print("=" * 50)
-
-    escolha = int(input("Digite uma das opções numéricas: "))
+    alunos.menu()
+    try:
+        escolha = int(input("Digite uma das opções numéricas: "))
+    except ValueError:
+        print("Digite apenas números!")
+        continue
 
     if escolha == 1:
-        alunos.cadastrar_alunos(cadastro_aluno)
+        alunos.cadastrar_aluno(lista_alunos)
     elif escolha == 2:
-        alunos.listar_alunos(cadastro_aluno)
+        alunos.listar_alunos(lista_alunos)
+        input("Aperte enter para continuar...")
     elif escolha == 3:
-        alunos.alterar_alunos(cadastro_aluno)
+        alunos.alterar_aluno(lista_alunos)
+    elif escolha == 4:
+        alunos.remover_aluno(lista_alunos)
+    elif escolha == 5:
+        print("Finalizando o sistema....")
+
+        break
+
     else:
-        alunos.remover_aluno(cadastro_aluno)
+        print("Opção inválida!")
