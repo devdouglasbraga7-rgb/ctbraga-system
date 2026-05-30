@@ -18,14 +18,14 @@ def cadastrar_aluno(lista_alunos):
     idade = int(input("Digite a idade: "))
     modalidade = str(input("Digite a modalidade: "))
     telefone = input("Digite seu telefone: ")
-    cadastro = {
+    aluno = {
             "id": proximo_id,
             "nome": nome,
             "idade": idade,
             "modalidade": modalidade,
             "telefone": telefone
                 }
-    lista_alunos.append(cadastro)
+    lista_alunos.append(aluno)
     proximo_id += 1
     
 def listar_alunos(lista_alunos):
