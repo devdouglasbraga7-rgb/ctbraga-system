@@ -29,6 +29,10 @@ def cadastrar_aluno(lista_alunos):
     proximo_id += 1
     
 def listar_alunos(lista_alunos):
+    if not lista_alunos:
+        print("Nenhum aluno encontrado")
+        return
+    
     for aluno in lista_alunos:
         print("-" * 50)
         print(f"ID: {aluno['id']}")
