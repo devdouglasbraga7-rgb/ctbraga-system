@@ -37,8 +37,7 @@ def listar_alunos(lista_alunos):
         print(f"Modalidade: {aluno['modalidade']}")
         print(f"Telefone: {aluno['telefone']}")
 def alterar_aluno(lista_alunos):
-    for aluno in lista_alunos:
-        print(aluno["id"], "-", aluno["nome"])
+    listar_resumo_nome(lista_alunos)
         
     opcao = int(input("Escolha o id do aluno: "))
     
@@ -52,8 +51,7 @@ def alterar_aluno(lista_alunos):
 
             print("Nome alterado com sucesso!")        
 def remover_aluno(lista_alunos):
-    for aluno in lista_alunos:
-        print(aluno["id"], "-", aluno["nome"])
+    listar_resumo_nome(lista_alunos)
     opcao = int(input("Digite o id do cadastro a ser excluído: "))
     for aluno in lista_alunos:
         if aluno["id"] == opcao:
@@ -61,3 +59,7 @@ def remover_aluno(lista_alunos):
             print("Cadastro excluído com sucesso!")
             
             break
+
+def listar_resumo_nome(lista_alunos):
+    for aluno in lista_alunos:
+        print(aluno["id"], "-", aluno["nome"])
