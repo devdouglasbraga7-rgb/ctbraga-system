@@ -29,6 +29,7 @@ def cadastrar_aluno(lista_alunos):
     proximo_id += 1
     
 def listar_alunos(lista_alunos):
+    
     if not lista_alunos:
         print("Nenhum aluno encontrado")
         return
@@ -41,8 +42,13 @@ def listar_alunos(lista_alunos):
         print(f"Modalidade: {aluno['modalidade']}")
         print(f"Telefone: {aluno['telefone']}")
 def alterar_aluno(lista_alunos):
+    
+    if not lista_alunos:
+        print("Nenhum aluno encontrado")
+        return
+    
     listar_resumo_nome(lista_alunos)
-        
+
     opcao = int(input("Escolha o id do aluno: "))
     
     novo_nome = input("Digite o novo nome: ")
@@ -55,7 +61,13 @@ def alterar_aluno(lista_alunos):
 
             print("Nome alterado com sucesso!")        
 def remover_aluno(lista_alunos):
+    
+    if not lista_alunos:
+        print("Nenhum aluno encontrado")
+        return
+    
     listar_resumo_nome(lista_alunos)
+
     opcao = int(input("Digite o id do cadastro a ser excluído: "))
     for aluno in lista_alunos:
         if aluno["id"] == opcao:
