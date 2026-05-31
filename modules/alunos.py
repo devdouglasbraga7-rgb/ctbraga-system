@@ -14,7 +14,14 @@ def cadastrar_aluno(lista_alunos):
     global proximo_id
     
     nome = input("Digite o nome: ")
-    idade = int(input("Digite a idade: "))
+    while True:
+        try:
+            idade = int(input("Digite a idade: "))
+            break
+
+        except ValueError:
+            print("Digite apenas números!")
+        
     modalidade = str(input("Digite a modalidade: "))
     telefone = input("Digite seu telefone: ")
     aluno = {
