@@ -9,7 +9,6 @@ def menu():
     print("5 - Sair")
     print("=" * 50)
 
-
 def cadastrar_aluno(lista_alunos):
     
     global proximo_id
@@ -50,16 +49,25 @@ def alterar_aluno(lista_alunos):
     listar_resumo_nome(lista_alunos)
 
     opcao = int(input("Escolha o id do aluno: "))
-    
-    novo_nome = input("Digite o novo nome: ")
 
+    encontrado = False
+    
     for aluno in lista_alunos:
 
         if aluno["id"] == opcao:
+            
+            novo_nome = input("Digite o novo nome: ")
 
             aluno["nome"] = novo_nome
+            encontrado = True
 
-            print("Nome alterado com sucesso!")        
+            print("Nome alterado com sucesso!")
+            
+            break
+
+    if not encontrado:
+        print("ID inexistente")
+
 def remover_aluno(lista_alunos):
     
     if not lista_alunos:
@@ -69,12 +77,20 @@ def remover_aluno(lista_alunos):
     listar_resumo_nome(lista_alunos)
 
     opcao = int(input("Digite o id do cadastro a ser excluído: "))
+    
+    encontrado = False
+
     for aluno in lista_alunos:
         if aluno["id"] == opcao:
             lista_alunos.remove(aluno)
+           
+            encontrado = True
+
             print("Cadastro excluído com sucesso!")
             
             break
+    if not encontrado:
+        print("ID inexistente")
 
 def listar_resumo_nome(lista_alunos):
     for aluno in lista_alunos:
