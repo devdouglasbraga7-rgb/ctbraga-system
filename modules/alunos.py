@@ -55,7 +55,13 @@ def alterar_aluno(lista_alunos):
     
     listar_resumo_nome(lista_alunos)
 
-    opcao = int(input("Escolha o id do aluno: "))
+    while True:    
+        
+        try:
+            opcao = int(input("Escolha o id do aluno: "))
+            break
+        except ValueError:
+            print("Digite apenas números!")
 
     encontrado = False
     
@@ -83,7 +89,12 @@ def remover_aluno(lista_alunos):
     
     listar_resumo_nome(lista_alunos)
 
-    opcao = int(input("Digite o id do cadastro a ser excluído: "))
+    while True:        
+        try:
+            opcao = int(input("Digite o id do cadastro a ser excluído: "))
+            break
+        except ValueError:
+            print("Digite apenas números!")
     
     encontrado = False
 
@@ -101,4 +112,4 @@ def remover_aluno(lista_alunos):
 
 def listar_resumo_nome(lista_alunos):
     for aluno in lista_alunos:
-        print(aluno["id"], "-", aluno["nome"])
+        print(aluno["id"], "-",aluno["nome"])
