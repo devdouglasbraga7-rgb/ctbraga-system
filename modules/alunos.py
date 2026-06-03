@@ -13,16 +13,30 @@ def cadastrar_aluno(lista_alunos):
     
     global proximo_id
     
-    nome = input("Digite o nome: ")
+    while True:
+        nome = input("Digite o nome: ").strip()
+        if nome:
+            break
+        print("O nome não pode ficar vazio!")
+
     while True:
         try:
             idade = int(input("Digite a idade: "))
-            break
+            
+            if idade <= 0:
+                print("A idade deve ser maior que zero!")
+               
+                continue
 
+            break
+        
         except ValueError:
             print("Digite apenas números!")
-        
-    modalidade = str(input("Digite a modalidade: "))
+    while True:    
+        modalidade = str(input("Digite a modalidade: ")).strip()
+        if modalidade:
+            break
+        print("A modalidade não pode ficar vazia!")
     telefone = input("Digite seu telefone: ")
     aluno = {
             "id": proximo_id,
