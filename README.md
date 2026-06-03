@@ -1,6 +1,6 @@
 # ctbraga-system
 
-- [V] Crud de alunos;
+- [x] Crud de alunos;
 - [ ] Planos;
 - [ ] Presença;
 - [ ] Financeiro;
