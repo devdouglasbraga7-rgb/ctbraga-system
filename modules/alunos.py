@@ -37,7 +37,19 @@ def cadastrar_aluno(lista_alunos):
         if modalidade:
             break
         print("A modalidade não pode ficar vazia!")
-    telefone = input("Digite seu telefone: ")
+        
+    while True:
+        telefone = input("Digite seu telefone: ").strip()
+        if not telefone:
+            print("O telefone não pode ficar vazio!")
+            continue
+        
+        if not telefone.isdigit():
+            print("Digite apenas números!")
+            continue
+        
+        break
+
     aluno = {
             "id": proximo_id,
             "nome": nome,
