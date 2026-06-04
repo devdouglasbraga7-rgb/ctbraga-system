@@ -29,7 +29,7 @@ def cadastrar_aluno(lista_alunos):
                 continue
 
             break
-        
+
         except ValueError:
             print("Digite apenas números!")
     while True:    
@@ -83,7 +83,12 @@ def alterar_aluno(lista_alunos):
 
         if aluno["id"] == opcao:
             
-            novo_nome = input("Digite o novo nome: ")
+            while True:
+                novo_nome = input("Digite o novo nome: ")
+                if novo_nome:
+                    break
+                print("O novo nome não pode ficar vazio!")
+                continue
 
             aluno["nome"] = novo_nome
             encontrado = True
