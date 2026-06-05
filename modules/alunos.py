@@ -159,3 +159,4 @@ def remover_aluno(lista_alunos):
 def listar_resumo_nome(lista_alunos):
     for aluno in lista_alunos:
         print(aluno["id"], "-",aluno["nome"])
+        
