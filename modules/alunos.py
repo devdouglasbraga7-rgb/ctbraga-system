@@ -96,7 +96,7 @@ def alterar_aluno(lista_alunos):
         if aluno["id"] == opcao:
             
             while True:
-                novo_nome = input("Digite o novo nome: ")
+                novo_nome = input("Digite o novo nome: ").strip()
                 if novo_nome:
                     break
                 print("O novo nome não pode ficar vazio!")
@@ -131,13 +131,28 @@ def remover_aluno(lista_alunos):
 
     for aluno in lista_alunos:
         if aluno["id"] == opcao:
-            lista_alunos.remove(aluno)
-           
             encontrado = True
-
-            print("Cadastro excluído com sucesso!")
+            print("-" * 50)
+            print(f"id: {aluno['id']}")
+            print(f"aluno: {aluno['nome']}")
+            print(f"Modalidade: {aluno['modalidade']}")
+            print("-" * 50)
             
-            break
+            while True:
+                confirmacao = input("\nTem certeza? S/N: ").strip().upper()
+                if confirmacao not in ["S", "N"]:
+                    print("Digite apenas S ou N.")
+                    continue
+                
+                elif confirmacao == "S":
+                   lista_alunos.remove(aluno)
+                   print("Cadastro excluído com sucesso!")
+
+                elif confirmacao == "N":
+                    print("Operação cancelada!")
+                    break
+        break
+
     if not encontrado:
         print("ID inexistente")
 
