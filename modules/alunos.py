@@ -15,7 +15,7 @@ def cadastrar_aluno(lista_alunos):
     
     nome = validar_nome()
 
-    idade = validar_idade()
+    data_nascimento = validar_data_nascimento()
     
     modalidade = validar_modalidade()
         
@@ -24,7 +24,7 @@ def cadastrar_aluno(lista_alunos):
     aluno = {
             "id": proximo_id,
             "nome": nome,
-            "idade": idade,
+            "data_nascimento": data_nascimento,
             "modalidade": modalidade,
             "telefone": telefone
                 }
@@ -41,7 +41,7 @@ def listar_alunos(lista_alunos):
         print("-" * 50)
         print(f"ID: {aluno['id']}")
         print(f"Nome: {aluno['nome']}")
-        print(f"Idade: {aluno['idade']}")
+        print(f"Data de nascimento: {aluno['data_nascimento']}")
         print(f"Modalidade: {aluno['modalidade']}")
         print(f"Telefone: {aluno['telefone']}")
 def alterar_aluno(lista_alunos):
@@ -69,7 +69,7 @@ def alterar_aluno(lista_alunos):
 
             print("=" * 50)
             print("1 - alterar nome")
-            print("2 - alterar idade")
+            print("2 - alterar data de nascimento")
             print("3 - alterar modalidade")
             print("4 - alterar telefone")
             print("=" * 50)
@@ -85,7 +85,7 @@ def alterar_aluno(lista_alunos):
                 aluno["nome"] = validar_nome()
 
             elif campo == 2:
-                aluno["idade"] = validar_idade()
+                aluno["data_nascimento"] = validar_data_nascimento()
 
             elif campo == 3:
                 aluno["modalidade"] = validar_modalidade()
@@ -123,8 +123,9 @@ def remover_aluno(lista_alunos):
         if aluno["id"] == opcao:
             encontrado = True
             print("-" * 50)
-            print(f"id: {aluno['id']}")
-            print(f"aluno: {aluno['nome']}")
+            print(f"ID: {aluno['id']}")
+            print(f"Aluno: {aluno['nome']}")
+            print(f"Data de nascimento: {aluno['data_nascimento']}")
             print(f"Modalidade: {aluno['modalidade']}")
             print("-" * 50)
             
@@ -158,21 +159,25 @@ def validar_nome():
     
         print("O nome não pode ficar vazio!")
 
-def validar_idade():
+def validar_data_nascimento():
     while True:
-        try:
-            idade = int(input("Digite a idade: "))
             
-            if idade <= 0:
-                print("A idade deve ser maior que zero!")
-               
+            data = input("Digite a data de nascimento (dd/mm/aaaa): ").strip()
+
+            partes = data.split("/")
+
+            if len(partes) != 3:
+                print("Formato inválido!")
+                continue
+            
+            dia, mes, ano = partes
+
+            if not (dia.isdigit() and mes.isdigit() and ano.isdigit()):
+                print("Digite apenas números!")
                 continue
 
-            return idade
-
-        except ValueError:
-            print("Digite apenas números!")
-
+            return data
+    
 def validar_modalidade():
     while True:    
         modalidade = str(input("Digite a modalidade: ")).strip()
