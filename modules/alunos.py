@@ -13,11 +13,8 @@ def cadastrar_aluno(lista_alunos):
     
     global proximo_id
     
-    while True:
-        nome = input("Digite o nome: ").strip()
-        if nome:
-            break
-        print("O nome não pode ficar vazio!")
+    nome = validar_nome()
+
 
     while True:
         try:
@@ -159,4 +156,11 @@ def remover_aluno(lista_alunos):
 def listar_resumo_nome(lista_alunos):
     for aluno in lista_alunos:
         print(aluno["id"], "-",aluno["nome"])
-        
+
+def validar_nome():
+     while True:
+        nome = input("Digite o nome: ").strip()
+        if nome:
+            return nome
+    
+        print("O nome não pode ficar vazio!")
