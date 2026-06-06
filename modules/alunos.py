@@ -65,19 +65,37 @@ def alterar_aluno(lista_alunos):
     for aluno in lista_alunos:
 
         if aluno["id"] == opcao:
-            
-            while True:
-                novo_nome = input("Digite o novo nome: ").strip()
-                if novo_nome:
-                    break
-                print("O novo nome não pode ficar vazio!")
-                continue
-
-            aluno["nome"] = novo_nome
             encontrado = True
 
-            print("Nome alterado com sucesso!")
+            print("=" * 50)
+            print("1 - alterar nome")
+            print("2 - alterar idade")
+            print("3 - alterar modalidade")
+            print("4 - alterar telefone")
+            print("=" * 50)
             
+            while True:
+                try:
+                    campo = int(input("Escolha a opção que deseja alterar: "))
+                    break
+                except ValueError:
+                    print("Digite apenas números!")
+
+            if campo == 1:
+                aluno["nome"] = validar_nome()
+
+            elif campo == 2:
+                aluno["idade"] = validar_idade()
+
+            elif campo == 3:
+                aluno["modalidade"] = validar_modalidade()
+            
+            elif campo == 4:
+                aluno["telefone"] = validar_telefone
+            
+            else:
+                print("Opção inválida!")
+                continue            
             break
 
     if not encontrado:
