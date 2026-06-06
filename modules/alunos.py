@@ -91,13 +91,14 @@ def alterar_aluno(lista_alunos):
                 aluno["modalidade"] = validar_modalidade()
             
             elif campo == 4:
-                aluno["telefone"] = validar_telefone
+                aluno["telefone"] = validar_telefone()
             
             else:
                 print("Opção inválida!")
                 continue            
+            
+            print("Campo alterado com sucesso!")
             break
-
     if not encontrado:
         print("ID inexistente")
 
@@ -140,7 +141,7 @@ def remover_aluno(lista_alunos):
                 elif confirmacao == "N":
                     print("Operação cancelada!")
                     break
-        break
+            break
 
     if not encontrado:
         print("ID inexistente")
