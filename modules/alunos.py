@@ -15,20 +15,8 @@ def cadastrar_aluno(lista_alunos):
     
     nome = validar_nome()
 
-
-    while True:
-        try:
-            idade = int(input("Digite a idade: "))
-            
-            if idade <= 0:
-                print("A idade deve ser maior que zero!")
-               
-                continue
-
-            break
-
-        except ValueError:
-            print("Digite apenas números!")
+    idade = validar_idade()
+    
     while True:    
         modalidade = str(input("Digite a modalidade: ")).strip()
         if modalidade:
@@ -164,3 +152,18 @@ def validar_nome():
             return nome
     
         print("O nome não pode ficar vazio!")
+
+def validar_idade():
+    while True:
+        try:
+            idade = int(input("Digite a idade: "))
+            
+            if idade <= 0:
+                print("A idade deve ser maior que zero!")
+               
+                continue
+
+            return idade
+
+        except ValueError:
+            print("Digite apenas números!")
