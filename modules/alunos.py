@@ -17,11 +17,7 @@ def cadastrar_aluno(lista_alunos):
 
     idade = validar_idade()
     
-    while True:    
-        modalidade = str(input("Digite a modalidade: ")).strip()
-        if modalidade:
-            break
-        print("A modalidade não pode ficar vazia!")
+    modalidade = validar_modalidade()
         
     while True:
         telefone = input("Digite seu telefone: ").strip()
@@ -167,3 +163,10 @@ def validar_idade():
 
         except ValueError:
             print("Digite apenas números!")
+
+def validar_modalidade():
+    while True:    
+        modalidade = str(input("Digite a modalidade: ")).strip()
+        if modalidade:
+            return modalidade
+        print("A modalidade não pode ficar vazia!")
