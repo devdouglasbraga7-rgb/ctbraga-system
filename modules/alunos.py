@@ -48,19 +48,38 @@ def cadastrar_aluno():
     cursor.close()
     conexao_db.close()
     
-def listar_alunos(lista_alunos):
+def listar_alunos():
     
-    if not lista_alunos:
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""SELECT
+                   a.IDaluno,
+                   p.nome,
+                   p.data_nascimento,
+                   a.status_a,
+                   t.numero
+                   FROM alunos a
+                   JOIN pessoas p
+                   ON a.pessoaID = p.IDpessoa
+                   JOIN telefones t
+                   ON t.pessoaID = p.IDpessoa
+                   """)
+    alunos = cursor.fetchall()
+    if not alunos:
         print("Nenhum aluno encontrado")
         return
     
-    for aluno in lista_alunos:
+    for aluno in alunos:
         print("-" * 50)
-        print(f"ID: {aluno['id']}")
-        print(f"Nome: {aluno['nome']}")
-        print(f"Data de nascimento: {aluno['data_nascimento']}")
-        print(f"Modalidade: {aluno['modalidade']}")
-        print(f"Telefone: {aluno['telefone']}")
+        print(f"ID: {aluno[0]}")
+        print(f"Nome: {aluno[1]}")
+        print(f"Data de nascimento: {aluno[2]}")
+        print(f"Status: {aluno[3]}")
+        print(f"Número: {aluno[4]}")
+    
+    cursor.close()
+    conexao_db.close()
 def alterar_aluno(lista_alunos):
     
     if not lista_alunos:
