@@ -1,7 +1,5 @@
 import modules.alunos as alunos
 
-lista_alunos = []
-
 while True:
     alunos.menu()
     try:
@@ -11,14 +9,14 @@ while True:
         continue
 
     if escolha == 1:
-        alunos.cadastrar_aluno(lista_alunos)
+        alunos.cadastrar_aluno()
     elif escolha == 2:
-        alunos.listar_alunos(lista_alunos)
+        alunos.listar_alunos()
         input("Aperte enter para continuar...")
     elif escolha == 3:
-        alunos.alterar_aluno(lista_alunos)
+        alunos.alterar_aluno()
     elif escolha == 4:
-        alunos.remover_aluno(lista_alunos)
+        alunos.remover_aluno()
     elif escolha == 5:
         print("Finalizando o sistema....")
 
