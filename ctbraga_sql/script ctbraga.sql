@@ -7,9 +7,9 @@ use ctbraga;
 create table planos(
  IDplano int auto_increment primary key,
  nome varchar(50) not null,
- valor_plano decimal(10,2) not null,
- duracao_meses int not null,
- qtd_pessoas int not null
+ valor_plano decimal(10,2) not null check(valor_plano > 0),
+ duracao_meses int not null check(duracao_meses > 0),
+ qtd_pessoas int not null check(qtd_pessoas > 0)
  ); 
  create table modalidades(
  IDmodalidade int auto_increment primary key,
@@ -26,12 +26,14 @@ create table planos(
  numero varchar(20) not null,
  pessoaID int not null,
  foreign key(pessoaID) references pessoas(IDpessoa)
+ on delete cascade
  );
  create table alunos(
  IDaluno int auto_increment primary key,
- status varchar(20) not null,
+ status_a enum('ATIVO', 'INATIVO') not null default 'ATIVO',
  pessoaID int unique not null,
  foreign key(pessoaID) references pessoas(IDpessoa)
+ on delete restrict
  );
  create table enderecos(
  IDendereco int auto_increment primary key,
@@ -47,14 +49,15 @@ create table planos(
 
 create table horarios(
  IDhorario int auto_increment primary key,
- dia_semana varchar(20) not null,
+ dia_semana enum('SEGUNDA-FEIRA','TERÇA-FEIRA','QUARTA-FEIRA','QUINTA-FEIRA','SEXTA-FEIRA') not null,
  hora_inicio time not null,
  hora_fim time not null,
  descricao text,
  modalidadeID int not null,
  foreign key(modalidadeID) references modalidades(IDmodalidade),
  ctID int not null,
- foreign key(ctID) references cts(IDct)
+ foreign key(ctID) references cts(IDct),
+ check(hora_fim > hora_inicio)
  ); 
  
  create table responsabilidades(
@@ -68,8 +71,8 @@ create table horarios(
  unique(alunoID, responsavelID, tipo_responsabilidade)
  );
  create table matriculas(
- IDmatriculas int auto_increment primary key,
- status_m varchar(20) not null,
+ IDmatricula int auto_increment primary key,
+ status_m enum('ATIVA','INATIVA','CANCELADA') not null default 'ATIVA',
  data_inicio date not null,
  data_fim date,
  alunoID int not null,
@@ -80,12 +83,12 @@ create table horarios(
  
  create table pagamentos(
  IDpagamento int auto_increment primary key,
- valor_pag decimal(10,2) not null,
+ valor_pag decimal(10,2) not null check(valor_pag > 0),
  vencimento date not null,
  data_pagamento date,
- status_pag varchar(20) not null,
+ status_pag enum('PAGO','PENDENTE', 'ATRASADO', 'CANCELADO') not null default 'PENDENTE',
  matriculaID int not null,
- foreign key(matriculaID) references matriculas(IDmatriculas)
+ foreign key(matriculaID) references matriculas(IDmatricula)
  );
  create table presencas(
  IDpresenca int auto_increment primary key,

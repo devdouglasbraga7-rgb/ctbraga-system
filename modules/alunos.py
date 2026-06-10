@@ -19,6 +19,8 @@ def cadastrar_aluno():
 
     data_nascimento = validar_data_nascimento()
 
+    telefone = validar_telefone()
+
     data_mysql = datetime.strptime(data_nascimento, "%d/%m/%Y").date()
 
     cursor.execute("""
@@ -27,9 +29,22 @@ def cadastrar_aluno():
     """, (nome, data_mysql)
         )
     
+    id_pessoa = cursor.lastrowid
+
+    cursor.execute("""
+        INSERT INTO alunos(status_a, pessoaID)
+        VALUES (%s, %s)
+    """, ("ATIVO", id_pessoa)
+        )
+
+    cursor.execute("""
+        INSERT INTO telefones(numero, pessoaID)
+        VALUES (%s, %s)
+    """, (telefone, id_pessoa))
+
     conexao_db.commit()
 
-    print("Pessoa cadastrada com sucesso!")
+    print("Aluno cadastrado com sucesso!")
     cursor.close()
     conexao_db.close()
     
