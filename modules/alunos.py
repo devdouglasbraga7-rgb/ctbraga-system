@@ -1,4 +1,5 @@
-proximo_id = 1
+import database.conexao as conexao
+from datetime import datetime
 
 def menu():
     print("=" * 50)
@@ -9,27 +10,28 @@ def menu():
     print("5 - Sair")
     print("=" * 50)
 
-def cadastrar_aluno(lista_alunos):
+def cadastrar_aluno():
     
-    global proximo_id
-    
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
     nome = validar_nome()
 
     data_nascimento = validar_data_nascimento()
-    
-    modalidade = validar_modalidade()
-        
-    telefone = validar_telefone()
 
-    aluno = {
-            "id": proximo_id,
-            "nome": nome,
-            "data_nascimento": data_nascimento,
-            "modalidade": modalidade,
-            "telefone": telefone
-                }
-    lista_alunos.append(aluno)
-    proximo_id += 1
+    data_mysql = datetime.strptime(data_nascimento, "%d/%m/%Y").date()
+
+    cursor.execute("""
+    INSERT INTO pessoas(nome, data_nascimento)
+    VALUES (%s, %s)
+    """, (nome, data_mysql)
+        )
+    
+    conexao_db.commit()
+
+    print("Pessoa cadastrada com sucesso!")
+    cursor.close()
+    conexao_db.close()
     
 def listar_alunos(lista_alunos):
     
