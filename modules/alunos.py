@@ -98,7 +98,7 @@ def alterar_aluno():
 
     cursor.execute("""
             SELECT
-                a.IDaluno,
+                p.IDpessoa,
                 p.nome,
                 p.data_nascimento,
                 t.numero
@@ -134,7 +134,15 @@ def alterar_aluno():
 
         if campo == 1:
             novo_nome = validar_nome()
-            print(novo_nome)
+            cursor.execute("""
+                        UPDATE pessoas
+                        SET nome = %s
+                        WHERE IDpessoa = %s
+                        """, (novo_nome, aluno[0]))
+            
+            conexao_db.commit()
+            
+            print("Nome alterado com sucesso!")
 
         elif campo == 2:
             nova_data = validar_data_nascimento()
@@ -148,7 +156,6 @@ def alterar_aluno():
             print("Opção inválida!")
             continue            
         
-        print("Campo alterado com sucesso!")
         break
 
 def remover_aluno():
