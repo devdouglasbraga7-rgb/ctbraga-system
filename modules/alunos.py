@@ -80,6 +80,7 @@ def listar_alunos():
     
     cursor.close()
     conexao_db.close()
+
 def alterar_aluno(lista_alunos):
 
     listar_resumo_nome()
@@ -130,7 +131,7 @@ def alterar_aluno(lista_alunos):
     if not encontrado:
         print("ID inexistente")
 
-def remover_aluno(lista_alunos):
+def remover_aluno():
     
     listar_resumo_nome()
 
@@ -140,37 +141,71 @@ def remover_aluno(lista_alunos):
             break
         except ValueError:
             print("Digite apenas números!")
+
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+            SELECT
+                a.IDaluno,
+                p.nome,
+                p.data_nascimento,
+                t.numero
+                From alunos a
+                JOIN pessoas p
+                ON a.pessoaID = p.IDpessoa
+                JOIN telefones t
+                ON t.pessoaID = p.IDpessoa
+                WHERE IDaluno = %s
+                """, (opcao,))
     
-    encontrado = False
-
-    for aluno in lista_alunos:
-        if aluno["id"] == opcao:
-            encontrado = True
-            print("-" * 50)
-            print(f"ID: {aluno['id']}")
-            print(f"Aluno: {aluno['nome']}")
-            print(f"Data de nascimento: {aluno['data_nascimento']}")
-            print(f"Modalidade: {aluno['modalidade']}")
-            print("-" * 50)
-            
-            while True:
-                confirmacao = input("\nTem certeza? S/N: ").strip().upper()
-                if confirmacao not in ["S", "N"]:
-                    print("Digite apenas S ou N.")
-                    continue
-                
-                elif confirmacao == "S":
-                   lista_alunos.remove(aluno)
-                   print("Cadastro excluído com sucesso!")
-
-                elif confirmacao == "N":
-                    print("Operação cancelada!")
-                    break
-            break
-
-    if not encontrado:
+    aluno = cursor.fetchone()
+    
+    if aluno is None:
         print("ID inexistente")
+        
+        cursor.close()
+        conexao_db.close()
+        
+        return
+    
+    print("-" * 50)
+    print(f"ID: {aluno[0]}")
+    print(f"Aluno: {aluno[1]}")
+    print(f"Data de nascimento: {aluno[2]}")
+    print(f"Número: {aluno[3]}")
+    print("-" * 50)
+            
+    while True:
+        confirmacao = input("\nTem certeza? S/N: ").strip().upper()
+        if confirmacao not in ["S", "N"]:
+            print("Digite apenas S ou N.")
+            continue
+        
+        elif confirmacao == "S":
+            
+            cursor.execute("""
+                    DELETE FROM alunos
+                    WHERE IDaluno = %s
+                        """,(opcao,))
+            conexao_db.commit()
 
+            print("Cadastro excluído com sucesso!")
+
+            cursor.close()
+            conexao_db.close()
+
+            return
+
+        elif confirmacao == "N":
+            print("Operação cancelada!")
+            
+            cursor.close()
+            conexao_db.close()
+
+            return
+
+       
 def listar_resumo_nome():
     conexao_db = conexao.conectar()
     cursor = conexao_db.cursor()
