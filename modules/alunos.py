@@ -146,7 +146,18 @@ def alterar_aluno():
 
         elif campo == 2:
             nova_data = validar_data_nascimento()
-            print(nova_data)
+            
+            nova_data_sql = datetime.strptime(nova_data, "%d/%m/%Y").date()
+            
+            cursor.execute("""
+                        UPDATE pessoas
+                        SET data_nascimento = %s
+                        WHERE IDpessoa = %s
+                    """, (nova_data_sql, aluno[0]))
+            
+            conexao_db.commit()
+
+            print("Data alterada com sucesso!")
         
         elif campo == 3:
             novo_numero = validar_telefone()
