@@ -81,7 +81,7 @@ def listar_alunos():
     cursor.close()
     conexao_db.close()
 
-def alterar_aluno(lista_alunos):
+def alterar_aluno():
 
     listar_resumo_nome()
 
@@ -93,43 +93,63 @@ def alterar_aluno(lista_alunos):
         except ValueError:
             print("Digite apenas números!")
 
-    encontrado = False
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+            SELECT
+                a.IDaluno,
+                p.nome,
+                p.data_nascimento,
+                t.numero
+                From alunos a
+                JOIN pessoas p
+                ON a.pessoaID = p.IDpessoa
+                JOIN telefones t
+                ON t.pessoaID = p.IDpessoa
+                WHERE IDaluno = %s
+                """, (opcao,))
     
-    for aluno in lista_alunos:
-
-        if aluno["id"] == opcao:
-            encontrado = True
-
-            print("=" * 50)
-            print("1 - alterar nome")
-            print("2 - alterar data de nascimento")
-            print("3 - alterar telefone")
-            print("=" * 50)
-            
-            while True:
-                try:
-                    campo = int(input("Escolha a opção que deseja alterar: "))
-                    break
-                except ValueError:
-                    print("Digite apenas números!")
-
-            if campo == 1:
-                aluno["nome"] = validar_nome()
-
-            elif campo == 2:
-                aluno["data_nascimento"] = validar_data_nascimento()
-            
-            elif campo == 3:
-                aluno["telefone"] = validar_telefone()
-            
-            else:
-                print("Opção inválida!")
-                continue            
-            
-            print("Campo alterado com sucesso!")
-            break
-    if not encontrado:
+    aluno = cursor.fetchone()
+    
+    if aluno is None:
         print("ID inexistente")
+        
+        cursor.close()
+        conexao_db.close()
+        
+        return    
+
+    print("=" * 50)
+    print("1 - alterar nome")
+    print("2 - alterar data de nascimento")
+    print("3 - alterar telefone")
+    print("=" * 50)
+            
+    while True:
+        try:
+            campo = int(input("Escolha a opção que deseja alterar: "))
+        except ValueError:
+            print("Digite apenas números!")
+
+        if campo == 1:
+            novo_nome = validar_nome()
+            print(novo_nome)
+
+        elif campo == 2:
+            nova_data = validar_data_nascimento()
+            print(nova_data)
+        
+        elif campo == 3:
+            novo_numero = validar_telefone()
+            print(novo_numero)
+
+        else:
+            print("Opção inválida!")
+            continue            
+        
+        print("Campo alterado com sucesso!")
+        break
 
 def remover_aluno():
     
