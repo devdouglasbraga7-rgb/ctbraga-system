@@ -81,12 +81,8 @@ def listar_alunos():
     cursor.close()
     conexao_db.close()
 def alterar_aluno(lista_alunos):
-    
-    if not lista_alunos:
-        print("Nenhum aluno encontrado")
-        return
-    
-    listar_resumo_nome(lista_alunos)
+
+    listar_resumo_nome()
 
     while True:    
         
@@ -106,8 +102,7 @@ def alterar_aluno(lista_alunos):
             print("=" * 50)
             print("1 - alterar nome")
             print("2 - alterar data de nascimento")
-            print("3 - alterar modalidade")
-            print("4 - alterar telefone")
+            print("3 - alterar telefone")
             print("=" * 50)
             
             while True:
@@ -122,11 +117,8 @@ def alterar_aluno(lista_alunos):
 
             elif campo == 2:
                 aluno["data_nascimento"] = validar_data_nascimento()
-
-            elif campo == 3:
-                aluno["modalidade"] = validar_modalidade()
             
-            elif campo == 4:
+            elif campo == 3:
                 aluno["telefone"] = validar_telefone()
             
             else:
@@ -140,11 +132,7 @@ def alterar_aluno(lista_alunos):
 
 def remover_aluno(lista_alunos):
     
-    if not lista_alunos:
-        print("Nenhum aluno encontrado")
-        return
-    
-    listar_resumo_nome(lista_alunos)
+    listar_resumo_nome()
 
     while True:        
         try:
@@ -183,9 +171,26 @@ def remover_aluno(lista_alunos):
     if not encontrado:
         print("ID inexistente")
 
-def listar_resumo_nome(lista_alunos):
-    for aluno in lista_alunos:
-        print(aluno["id"], "-",aluno["nome"])
+def listar_resumo_nome():
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+            SELECT 
+                a.IDaluno,
+                p.nome
+            FROM alunos a
+            JOIN pessoas p
+                ON a.pessoaID = p.IDpessoa
+    """)
+    alunos = cursor.fetchall()
+    if not alunos:
+        print("Nenhum aluno encontrado")
+    for aluno in alunos:
+        print(f"{aluno[0]} - {aluno[1]}")
+
+    cursor.close()
+    conexao_db.close()
 
 def validar_nome():
      while True:
@@ -213,13 +218,6 @@ def validar_data_nascimento():
                 continue
 
             return data
-    
-def validar_modalidade():
-    while True:    
-        modalidade = str(input("Digite a modalidade: ")).strip()
-        if modalidade:
-            return modalidade
-        print("A modalidade não pode ficar vazia!")
 
 def validar_telefone():
     while True:
