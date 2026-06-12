@@ -144,6 +144,11 @@ def alterar_aluno():
             
             print("Nome alterado com sucesso!")
 
+            cursor.close()
+            conexao_db.close()
+
+            return
+
         elif campo == 2:
             nova_data = validar_data_nascimento()
             
@@ -158,10 +163,29 @@ def alterar_aluno():
             conexao_db.commit()
 
             print("Data alterada com sucesso!")
+
+            cursor.close()
+            conexao_db.close()        
+
+            return
         
         elif campo == 3:
             novo_numero = validar_telefone()
-            print(novo_numero)
+            
+            cursor.execute("""
+                        UPDATE telefones
+                        SET numero = %s
+                        WHERE pessoaID = %s            
+                        """, (novo_numero, aluno[0]))
+            
+            conexao_db.commit()
+
+            print("Telefone alterado com sucesso!")
+
+            cursor.close()
+            conexao_db.close()
+
+            return
 
         else:
             print("Opção inválida!")
