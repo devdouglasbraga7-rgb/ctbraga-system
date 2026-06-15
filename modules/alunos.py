@@ -2,7 +2,7 @@ import database.conexao as conexao
 from datetime import datetime
 
 #Mostra o menu de opções
-def menu():
+def menu_alunos():
     print("=" * 50)
     print("1 - Cadastrar aluno")
     print("2 - Listar alunos")
