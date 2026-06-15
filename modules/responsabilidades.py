@@ -1,0 +1,83 @@
+"""REGRAS
+
+- Um aluno pode possuir vários responsáveis legais.
+
+- Um aluno pode possuir apenas um responsável financeiro.
+
+- Uma pessoa pode ser responsável por vários alunos.
+
+- Uma mesma pessoa pode ser responsável legal e financeiro do mesmo aluno.
+
+- Não permitir responsabilidades duplicadas."""
+
+import modules.alunos as alunos
+import database.conexao as conexao
+
+
+def menu_resp():
+    print("=" * 50)
+    print("1 - Vincular responsabilidade")
+    print("2 - Listar responsabilidades")
+    print("3 - Alterar responsabilidade")
+    print("4 - Remover responsabilidade")
+    print("5 - Sair")
+    print("=" * 50)
+
+def vincular_resp():
+    alunos.listar_resumo_nome()
+
+    aluno_id = validar_id("Digite o id do aluno:")
+
+    listar_pessoas()
+
+    responsavel_id = validar_id("Digite o id do responsável: ")
+
+    print(aluno_id, responsavel_id)
+
+def listar_resp():
+    pass
+
+def alterar_resp():
+    pass
+
+def remover_resp():
+    pass
+
+def listar_pessoas():
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+            SELECT
+                p.IDpessoa,
+                p.nome,
+                t.numero
+                   FROM pessoas p
+                   JOIN telefones t
+                   ON t.pessoaID = p.IDpessoa
+""")
+    
+    pessoas = cursor.fetchall()
+    if not pessoas:
+        print("Nenhuma pessoa encontrada!")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
+
+    for pessoa in pessoas:
+        print("-" * 30)
+        print(f"ID: {pessoa[0]}")
+        print(f"Nome: {pessoa[1]}")
+        print(f"Número: {pessoa[2]}")
+
+    cursor.close()
+    conexao_db.close()
+
+def validar_id(mensagem):
+    while True:
+        try:
+            return int(input(mensagem))
+        except ValueError:
+            print("Digite apenas números!") 
