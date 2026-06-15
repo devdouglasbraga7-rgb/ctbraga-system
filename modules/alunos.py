@@ -1,6 +1,7 @@
 import database.conexao as conexao
 from datetime import datetime
 
+#Mostra o menu de opções
 def menu():
     print("=" * 50)
     print("1 - Cadastrar aluno")
@@ -68,6 +69,10 @@ def listar_alunos():
     alunos = cursor.fetchall()
     if not alunos:
         print("Nenhum aluno encontrado")
+
+        cursor.close()
+        conexao_db.close()
+        
         return
     
     for aluno in alunos:
@@ -92,6 +97,7 @@ def alterar_aluno():
             break
         except ValueError:
             print("Digite apenas números!")
+
 
     conexao_db = conexao.conectar()
     cursor = conexao_db.cursor()
@@ -131,6 +137,7 @@ def alterar_aluno():
             campo = int(input("Escolha a opção que deseja alterar: "))
         except ValueError:
             print("Digite apenas números!")
+            continue
 
         if campo == 1:
             novo_nome = validar_nome()
@@ -283,6 +290,12 @@ def listar_resumo_nome():
     alunos = cursor.fetchall()
     if not alunos:
         print("Nenhum aluno encontrado")
+        
+        cursor.close()
+        conexao_db.close()
+        
+        return
+    
     for aluno in alunos:
         print(f"{aluno[0]} - {aluno[1]}")
 
@@ -298,23 +311,14 @@ def validar_nome():
         print("O nome não pode ficar vazio!")
 
 def validar_data_nascimento():
-    while True:
-            
-            data = input("Digite a data de nascimento (dd/mm/aaaa): ").strip()
+    while True: 
+        data = input("Digite a data de nascimento (dd/mm/aaaa): ").strip()
 
-            partes = data.split("/")
-
-            if len(partes) != 3:
-                print("Formato inválido!")
-                continue
-            
-            dia, mes, ano = partes
-
-            if not (dia.isdigit() and mes.isdigit() and ano.isdigit()):
-                print("Digite apenas números!")
-                continue
-
+        try:
+            datetime.strptime(data, "%d/%m/%Y")
             return data
+        except ValueError:
+            print("Data inválida! Digite no formato: dd/mm/aaaa")
 
 def validar_telefone():
     while True:
