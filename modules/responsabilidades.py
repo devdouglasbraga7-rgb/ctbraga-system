@@ -86,6 +86,7 @@ def vincular_resp():
             
             cursor.close()
             conexao_db.close()
+            print("Responsabilidade vinculada com sucesso!")
             return
 
         elif resultado_finan == 0:
@@ -136,12 +137,93 @@ def listar_resp():
 
     cursor.close()
     conexao_db.close()
-    
+
 def alterar_resp():
     pass
 
 def remover_resp():
-    pass
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+                SELECT
+                    r.IDresponsabilidade,
+                    pa.nome,
+                    pr.nome,
+                    r.tipo_responsabilidade
+                    FROM responsabilidades r
+                    JOIN alunos a
+                    ON r.alunoID = a.IDaluno
+                    JOIN pessoas pa
+                    ON a.pessoaID = pa.IDpessoa
+                    JOIN pessoas pr
+                    ON r.responsavelID = pr.IDpessoa
+                    """)
+    responsabilidades = cursor.fetchall()
+    if not responsabilidades:
+        print("Não há nenhum vinculo de responsabilidade")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
+    
+    for responsabilidade in responsabilidades:
+        print("-" * 30)
+        print(f"ID: {responsabilidade[0]}")
+        print(f"Aluno: {responsabilidade[1]}")
+        print(f"Responsável: {responsabilidade[2]}")
+        print(f"Tipo: {responsabilidade[3]}")
+        
+    id_resp = validar_id("Digite o id da responsabilidade: ")
+
+    responsabilidade_escolhida = None
+
+    for responsabilidade in responsabilidades:
+        if responsabilidade[0] == id_resp:
+            responsabilidade_escolhida = responsabilidade
+            break
+
+    if responsabilidade_escolhida is None:
+        print("Responsabilidade não encontrada!")
+        
+        cursor.close()
+        conexao_db.close()
+        return
+    
+    print("-" * 30)
+    print(f"Aluno: {responsabilidade_escolhida[1]}")
+    print(f"Responsável: {responsabilidade_escolhida[2]}")
+    print(f"Tipo: {responsabilidade_escolhida[3]}")
+
+    while True:
+        confirmacao = str(input("Tem certeza que deseja excluir? S/N: ")).strip().upper()
+
+        if confirmacao not in ("S", "N"):
+            print("Digite apenas S ou N por favor!")
+            continue
+        break
+    
+    if confirmacao == "S":
+        cursor.execute("""
+                    DELETE FROM responsabilidades
+                    WHERE IDresponsabilidade = %s
+                    """, (id_resp,))
+    
+        conexao_db.commit()
+
+        print("Responsabilidade excluída com sucesso!")
+
+        cursor.close()
+        conexao_db.close()
+        return
+    
+    if confirmacao == "N":
+        print("Operação cancelada!")
+
+        cursor.close()
+        conexao_db.close()
+        return
 
 def listar_pessoas():
     conexao_db = conexao.conectar()
