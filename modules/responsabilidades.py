@@ -103,8 +103,40 @@ def vincular_resp():
             return
 
 def listar_resp():
-    pass
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
 
+    cursor.execute("""
+                SELECT
+                    pa.nome,
+                    pr.nome,
+                    r.tipo_responsabilidade
+                    FROM responsabilidades r
+                    JOIN alunos a
+                    ON r.alunoID = a.IDaluno
+                    JOIN pessoas pa
+                    ON a.pessoaID = pa.IDpessoa
+                    JOIN pessoas pr
+                    ON r.responsavelID = pr.IDpessoa
+                    """)
+    responsabilidades = cursor.fetchall()
+    if not responsabilidades:
+        print("Não há nenhum vinculo de responsabilidade")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
+    
+    for responsabilidade in responsabilidades:
+        print("-" * 30)
+        print(f"Aluno: {responsabilidade[0]}")
+        print(f"Responsável: {responsabilidade[1]}")
+        print(f"Tipo: {responsabilidade[2]}")
+
+    cursor.close()
+    conexao_db.close()
+    
 def alterar_resp():
     pass
 
