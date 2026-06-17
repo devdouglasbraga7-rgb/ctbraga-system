@@ -32,7 +32,75 @@ def vincular_resp():
 
     responsavel_id = validar_id("Digite o id do responsável: ")
 
-    print(aluno_id, responsavel_id)
+    while True:
+            tipo_resp = str(input("Qual o tipo de responsabilidade: FINANCEIRO/LEGAL: ")).strip().upper()
+
+            if tipo_resp not in ("FINANCEIRO", "LEGAL"):
+                print("Digite apenas FINANCEIRO ou LEGAL!")
+                continue
+            break
+    
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
+
+    cursor.execute("""
+                SELECT COUNT(*)
+                FROM responsabilidades
+                WHERE alunoID = %s
+                AND responsavelID = %s
+                AND tipo_responsabilidade = %s
+    """, (aluno_id, responsavel_id, tipo_resp))
+
+    resultado = cursor.fetchone()[0]
+
+    if resultado > 0:
+        print("Essa responsabilidade já está cadastrada!")
+
+        cursor.close()
+        conexao_db.close()
+        return
+    
+    elif tipo_resp == "LEGAL":
+        cursor.execute("""
+                    INSERT INTO responsabilidades(alunoID, responsavelID, tipo_responsabilidade)
+                    VALUES (%s, %s, %s)
+                    """, (aluno_id, responsavel_id, tipo_resp))
+        
+        conexao_db.commit()
+
+        cursor.close()
+        conexao_db.close()
+        return
+
+    elif tipo_resp == "FINANCEIRO":
+        cursor.execute("""
+                    SELECT COUNT(*)
+                    FROM responsabilidades
+                    WHERE alunoID = %s
+                    AND tipo_responsabilidade = 'FINANCEIRO'
+                """, (aluno_id,))
+        resultado_finan = cursor.fetchone()[0]
+
+        if resultado_finan > 0:
+            print("Já existe um responsável financeiro!")
+            
+            cursor.close()
+            conexao_db.close()
+            return
+
+        elif resultado_finan == 0:
+            cursor.execute("""
+                        INSERT INTO responsabilidades(alunoID, responsavelID, tipo_responsabilidade)
+                        VALUES (%s, %s, %s)
+                        """, (aluno_id, responsavel_id, tipo_resp))
+            
+            conexao_db.commit()
+
+            cursor.close()
+            conexao_db.close()
+
+            print("Responsabilidade vinculada com sucesso!")
+            return
 
 def listar_resp():
     pass
@@ -80,4 +148,4 @@ def validar_id(mensagem):
         try:
             return int(input(mensagem))
         except ValueError:
-            print("Digite apenas números!") 
+            print("Digite apenas números!")
