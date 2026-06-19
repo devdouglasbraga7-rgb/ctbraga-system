@@ -139,8 +139,140 @@ def listar_resp():
     conexao_db.close()
 
 def alterar_resp():
-    pass
+    conexao_db = conexao.conectar()
+    cursor = conexao_db.cursor()
 
+    cursor.execute("""
+                SELECT
+                    r.IDresponsabilidade,
+                    r.alunoID,
+                    r.responsavelID,
+                    pa.nome,
+                    pr.nome,
+                    r.tipo_responsabilidade
+                    FROM responsabilidades r
+                    JOIN alunos a
+                    ON r.alunoID = a.IDaluno
+                    JOIN pessoas pa
+                    ON a.pessoaID = pa.IDpessoa
+                    JOIN pessoas pr
+                    ON r.responsavelID = pr.IDpessoa
+                    """)
+    responsabilidades = cursor.fetchall()
+    if not responsabilidades:
+        print("Não há nenhum vinculo de responsabilidade")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
+    
+    for responsabilidade in responsabilidades:
+        print("-" * 30)
+        print(f"ID: {responsabilidade[0]}")
+        print(f"Aluno: {responsabilidade[3]}")
+        print(f"Responsável: {responsabilidade[4]}")
+        print(f"Tipo: {responsabilidade[5]}")
+        
+    id_resp = validar_id("Digite o id da responsabilidade: ")
+
+    responsabilidade_escolhida = None
+
+    for responsabilidade in responsabilidades:
+        if responsabilidade[0] == id_resp:
+            responsabilidade_escolhida = responsabilidade
+            break
+
+    if responsabilidade_escolhida is None:
+        print("Responsabilidade não encontrada!")
+        
+        cursor.close()
+        conexao_db.close()
+        return
+    
+    print("-" * 30)
+    print(f"ID responsabilidade: {responsabilidade_escolhida[0]}")
+    print(f"ID aluno: {responsabilidade_escolhida[1]}")
+    print(f"ID responsável: {responsabilidade_escolhida[2]}")
+    print(f"Aluno: {responsabilidade_escolhida[3]}")
+    print(f"Responsável: {responsabilidade_escolhida[4]}")
+    print(f"Tipo: {responsabilidade_escolhida[5]}")
+    print("-" * 30)
+    print(" ")
+    print("=" * 30)
+    print("1 - Alterar responsável")
+    print("2 - Alterar tipo")
+    print("3 - Alterar ambos")
+    print("=" * 30)
+
+    opcao = validar_id("Escolha a opção: ")
+
+    if opcao == 1:
+        listar_pessoas()
+
+        novo_responsavel_id = validar_id("Digite o ID do novo responsável: ")
+
+        cursor.execute("""
+                SELECT COUNT(*)
+                FROM pessoas
+                WHERE IDpessoa = %s
+                    """, (novo_responsavel_id,))
+        
+        resultado_pessoa = cursor.fetchone()[0]
+        
+        if resultado_pessoa == 0:
+            print("Responsável não encontrado!")
+            
+            cursor.close()
+            conexao_db.close()
+            return
+        
+        cursor.execute("""
+                    SELECT COUNT(*)
+                    FROM responsabilidades
+                    WHERE alunoID = %s
+                    AND responsavelID = %s
+                    AND tipo_responsabilidade = %s
+                    """, (responsabilidade_escolhida[1], novo_responsavel_id, responsabilidade_escolhida[5]))
+        
+        resultado_duplicidade = cursor.fetchone()[0]
+
+        if resultado_duplicidade > 0:
+            print("Esse vínculo já existe!")
+
+            cursor.close()
+            conexao_db.close()
+            return
+
+        cursor.execute("""
+                UPDATE responsabilidades
+                SET responsavelID = %s
+                WHERE IDresponsabilidade = %s
+                    """, (novo_responsavel_id, id_resp))
+        
+        conexao_db.commit()
+
+        print("Responsável alterado com sucesso")
+
+        cursor.close()
+        conexao_db.close()
+        
+        return
+    
+    elif opcao == 2:
+        pass
+    
+    elif opcao == 3:
+        pass
+    
+    else:
+        print("Opção inválida")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
+    
 def remover_resp():
     conexao_db = conexao.conectar()
     cursor = conexao_db.cursor()
