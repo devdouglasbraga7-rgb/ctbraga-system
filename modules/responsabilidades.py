@@ -260,8 +260,52 @@ def alterar_resp():
         return
     
     elif opcao == 2:
-        pass
-    
+        while True:
+            novo_tipo = input("Digite o novo tipo de responsabilidade (FINANCEIRO/LEGAL): ").strip().upper()
+            if novo_tipo not in ("FINANCEIRO", "LEGAL"):
+                print("Digite apenas FINANCEIRO ou LEGAL")
+                continue
+
+            elif novo_tipo == responsabilidade_escolhida[5]:
+                print("Esse já é o tipo atual")
+                
+                cursor.close()
+                conexao_db.close()
+
+                return
+            
+            elif novo_tipo == "FINANCEIRO":
+                cursor.execute("""
+                            SELECT COUNT(*)
+                            FROM responsabilidades
+                            WHERE alunoID = %s
+                            AND tipo_responsabilidade = 'FINANCEIRO'
+                                """, (responsabilidade_escolhida[1],))
+                
+                resultado_finan = cursor.fetchone()[0]
+                if resultado_finan > 0:
+                    print("Já existe responsável financeiro!")
+
+                    cursor.close()
+                    conexao_db.close()
+                    
+                    return
+            
+            cursor.execute("""
+                        UPDATE responsabilidades
+                        SET tipo_responsabilidade = %s
+                        WHERE IDresponsabilidade = %s
+                            """, (novo_tipo, id_resp))
+            
+            conexao_db.commit()
+
+            print("Tipo de responsabilidade atualizado com sucesso!")
+
+            cursor.close()
+            conexao_db.close()
+
+            return
+
     elif opcao == 3:
         pass
     
