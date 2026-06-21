@@ -67,6 +67,8 @@ def vincular_resp():
                     """, (aluno_id, responsavel_id, tipo_resp))
         
         conexao_db.commit()
+        
+        print("Responsabilidade  vinculada com sucesso!")
 
         cursor.close()
         conexao_db.close()
@@ -86,7 +88,6 @@ def vincular_resp():
             
             cursor.close()
             conexao_db.close()
-            print("Responsabilidade vinculada com sucesso!")
             return
 
         elif resultado_finan == 0:
@@ -307,7 +308,93 @@ def alterar_resp():
             return
 
     elif opcao == 3:
-        pass
+        listar_pessoas()
+
+        novo_responsavel_id = validar_id("Digite o ID do novo responsável: ")
+
+        cursor.execute("""
+                SELECT COUNT(*)
+                FROM pessoas
+                WHERE IDpessoa = %s
+                    """, (novo_responsavel_id,))
+        
+        resultado_pessoa = cursor.fetchone()[0]
+        
+        if resultado_pessoa == 0:
+            print("Responsável não encontrado!")
+            
+            cursor.close()
+            conexao_db.close()
+            return
+        
+        while True:
+            novo_tipo = input("Digite o novo tipo de responsabilidade (FINANCEIRO/LEGAL): ").strip().upper()
+            if novo_tipo not in ("FINANCEIRO", "LEGAL"):
+                print("Digite apenas FINANCEIRO ou LEGAL")
+                continue
+
+       
+            
+            elif novo_tipo == "FINANCEIRO":
+                cursor.execute("""
+                            SELECT COUNT(*)
+                            FROM responsabilidades
+                            WHERE alunoID = %s
+                            AND tipo_responsabilidade = 'FINANCEIRO'
+                            AND IDresponsabilidade <> %s
+                                """, (responsabilidade_escolhida[1], id_resp))
+                
+                resultado_finan = cursor.fetchone()[0]
+                if resultado_finan > 0:
+                    print("Já existe responsável financeiro!")
+
+                    cursor.close()
+                    conexao_db.close()
+                    return
+                
+            break
+
+        if (novo_responsavel_id == responsabilidade_escolhida[2] 
+            and novo_tipo == responsabilidade_escolhida[5]):
+            print("Nenhuma alteração foi realizada!")
+
+            cursor.close()
+            conexao_db.close()
+
+            return
+        
+        cursor.execute("""
+                    SELECT COUNT(*)
+                    FROM responsabilidades
+                    WHERE alunoID = %s
+                    AND responsavelID = %s
+                    AND tipo_responsabilidade = %s
+                    """, (responsabilidade_escolhida[1], novo_responsavel_id, novo_tipo))
+        
+        resultado_duplicidade = cursor.fetchone()[0]
+
+        if resultado_duplicidade > 0:
+            print("Esse vínculo já existe!")
+
+            cursor.close()
+            conexao_db.close()
+            return
+        
+        cursor.execute("""
+                UPDATE responsabilidades
+                SET responsavelID = %s,
+                    tipo_responsabilidade = %s
+                WHERE IDresponsabilidade = %s
+                    """, (novo_responsavel_id, novo_tipo, id_resp))
+        
+        conexao_db.commit()
+
+        print("Responsabilidade alterada com sucesso!")
+
+        cursor.close()
+        conexao_db.close()
+
+        return
     
     else:
         print("Opção inválida")
