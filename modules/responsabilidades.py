@@ -526,3 +526,4 @@ def validar_id(mensagem):
             return int(input(mensagem))
         except ValueError:
             print("Digite apenas números!")
+            
