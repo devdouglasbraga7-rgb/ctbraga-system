@@ -10,18 +10,13 @@
 
 - Não permitir responsabilidades duplicadas."""
 
-import modules.alunos as alunos
-import database.conexao as conexao
+import src.modules.alunos as alunos
+import src.database.conexao as conexao
+from src.utils.interface import menu
 
 
 def menu_resp():
-    print("=" * 50)
-    print("1 - Vincular responsabilidade")
-    print("2 - Listar responsabilidades")
-    print("3 - Alterar responsabilidade")
-    print("4 - Remover responsabilidade")
-    print("5 - Sair")
-    print("=" * 50)
+    menu("MENU RESPONSABILIDADES", ["1 - Vincular responsabilidade", "2 - Listar responsabilidades", "3 - Alterar responsabilidade", "4 - Remover responsabilidade", "5 - Sair"])
 
 def vincular_resp():
     alunos.listar_resumo_nome()
@@ -526,4 +521,3 @@ def validar_id(mensagem):
             return int(input(mensagem))
         except ValueError:
             print("Digite apenas números!")
-            

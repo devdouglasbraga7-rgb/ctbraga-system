@@ -1,15 +1,10 @@
-import database.conexao as conexao
+import src.database.conexao as conexao
 from datetime import datetime
+from src.utils.interface import menu
 
 #Mostra o menu de opções
 def menu_alunos():
-    print("=" * 50)
-    print("1 - Cadastrar aluno")
-    print("2 - Listar alunos")
-    print("3 - Alterar aluno")
-    print("4 - Remover aluno")
-    print("5 - Sair")
-    print("=" * 50)
+    menu("MENU ALUNOS", ["1 - Cadastrar aluno", "2 - Listar alunos", "3 - Alterar aluno", "4 - Remover aluno", "5 - Sair"])
 
 def cadastrar_aluno():
     

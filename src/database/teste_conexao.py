@@ -1,4 +1,4 @@
-from conexao import conectar
+from src.database.conexao import conectar
 
 conexao = conectar()
 
