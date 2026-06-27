@@ -12,11 +12,17 @@
 
 import src.modules.alunos as alunos
 import src.database.conexao as conexao
+from src.utils.helpers import validar_id
 from src.utils.interface import menu
 
 
 def menu_resp():
-    menu("MENU RESPONSABILIDADES", ["1 - Vincular responsabilidade", "2 - Listar responsabilidades", "3 - Alterar responsabilidade", "4 - Remover responsabilidade", "5 - Sair"])
+    menu("MENU RESPONSABILIDADES",
+          ["1 - Vincular responsabilidade",
+            "2 - Listar responsabilidades", 
+            "3 - Alterar responsabilidade",
+              "4 - Remover responsabilidade",
+                "5 - Sair"])
 
 def vincular_resp():
     alunos.listar_resumo_nome()
@@ -514,10 +520,3 @@ def listar_pessoas():
 
     cursor.close()
     conexao_db.close()
-
-def validar_id(mensagem):
-    while True:
-        try:
-            return int(input(mensagem))
-        except ValueError:
-            print("Digite apenas números!")

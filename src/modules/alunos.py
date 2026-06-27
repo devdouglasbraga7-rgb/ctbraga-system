@@ -1,6 +1,7 @@
 import src.database.conexao as conexao
 from datetime import datetime
 from src.utils.interface import menu
+import src.utils.helpers as help
 
 #Mostra o menu de opções
 def menu_alunos():
@@ -11,11 +12,11 @@ def cadastrar_aluno():
     conexao_db = conexao.conectar()
     cursor = conexao_db.cursor()
 
-    nome = validar_nome()
+    nome = help.validar_nome()
 
-    data_nascimento = validar_data_nascimento()
+    data_nascimento = help.validar_data_nascimento()
 
-    telefone = validar_telefone()
+    telefone = help.validar_telefone()
 
     data_mysql = datetime.strptime(data_nascimento, "%d/%m/%Y").date()
 
@@ -135,7 +136,7 @@ def alterar_aluno():
             continue
 
         if campo == 1:
-            novo_nome = validar_nome()
+            novo_nome = help.validar_nome()
             cursor.execute("""
                         UPDATE pessoas
                         SET nome = %s
@@ -152,7 +153,7 @@ def alterar_aluno():
             return
 
         elif campo == 2:
-            nova_data = validar_data_nascimento()
+            nova_data = help.validar_data_nascimento()
             
             nova_data_sql = datetime.strptime(nova_data, "%d/%m/%Y").date()
             
@@ -172,7 +173,7 @@ def alterar_aluno():
             return
         
         elif campo == 3:
-            novo_numero = validar_telefone()
+            novo_numero = help.validar_telefone()
             
             cursor.execute("""
                         UPDATE telefones
@@ -296,34 +297,3 @@ def listar_resumo_nome():
 
     cursor.close()
     conexao_db.close()
-
-def validar_nome():
-     while True:
-        nome = input("Digite o nome: ").strip()
-        if nome:
-            return nome
-    
-        print("O nome não pode ficar vazio!")
-
-def validar_data_nascimento():
-    while True: 
-        data = input("Digite a data de nascimento (dd/mm/aaaa): ").strip()
-
-        try:
-            datetime.strptime(data, "%d/%m/%Y")
-            return data
-        except ValueError:
-            print("Data inválida! Digite no formato: dd/mm/aaaa")
-
-def validar_telefone():
-    while True:
-        telefone = input("Digite seu telefone: ").strip()
-        if not telefone:
-            print("O telefone não pode ficar vazio!")
-            continue
-        
-        if not telefone.isdigit():
-            print("Digite apenas números!")
-            continue
-        
-        return telefone
